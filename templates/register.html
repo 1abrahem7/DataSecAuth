@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Register New User{% endblock %}
+{% block content %}
+<div class="form-box">
+  <h2>Register New User</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category,msg in messages %}
+        <p class="{{ 'error' if category=='error' else 'msg' }}">{{ msg }}</p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  <form method="POST">
+    <input type="text" name="username" placeholder="Username" class="form-control" required />
+    <div class="hint">Enter a unique username (letters and/or numbers).</div>
+
+    <input type="password" name="password" placeholder="Password" class="form-control" required />
+    <div class="hint">Password should contain letters, numbers, and symbols.</div>
+
+    <input type="text" name="first_name" placeholder="First Name" class="form-control" required />
+    <div class="hint">Only English letters are allowed (A-Z, a-z).</div>
+
+    <input type="text" name="last_name" placeholder="Last Name" class="form-control" required />
+    <div class="hint">Only English letters are allowed (A-Z, a-z).</div>
+
+    <input type="text" name="national_id" placeholder="ID Number (9 digits)" class="form-control" required />
+    <div class="hint">Enter exactly 9 digits for ID.</div>
+
+    <input type="text" name="card_number" placeholder="Credit Card (XXXX XXXX XXXX XXXX)" class="form-control" required />
+    <div class="hint">Enter 16 digits, grouped in 4s.</div>
+
+    <input type="text" name="valid_date" placeholder="Valid Date (MM/YY)" class="form-control" required />
+    <div class="hint">Enter date in MM/YY format (e.g., 12/25).</div>
+
+    <input type="text" name="cvc" placeholder="CVC (3 digits)" class="form-control" required />
+    <div class="hint">Enter exactly 3 digits for CVC.</div>
+
+    <button type="submit" class="btn btn w-100">Register</button>
+  </form>
+  <a href="{{ url_for('login') }}" class="mt-3 d-block">Back to Login</a>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const ccInput = document.querySelector('input[name="card_number"]');
+    ccInput.addEventListener('input', function(e) {
+      let v = e.target.value.replace(/\D/g, '').substring(0,16);
+      let formatted = '';
+      for (let i=0; i<v.length; i+=4) formatted += v.substring(i,i+4) + ' ';
+      e.target.value = formatted.trim();
+    });
+  });
+</script>
+{% endblock %}

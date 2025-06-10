@@ -11,29 +11,44 @@
     {% endif %}
   {% endwith %}
   <form method="POST">
-    <input type="text" name="username" placeholder="Username" class="form-control" required />
-    <div class="hint">Enter a unique username (letters and/or numbers).</div>
+    <div class="form-floating mb-3">
+    <input type="text" name="username" placeholder="Username" class="form-control mb-2" required />
+    <div class="hint" >Enter a unique username (letters and/or numbers).</div>
+    </div>
+    <input type="password"
+       id="passwordInput"
+       name="password"
+       placeholder="Password"
+       class="form-control mb-2"
+       required />
+<div id="passwordHint" class="hint">
+  Password should be ≥6 chars, include letters, numbers & symbols.
+</div>
 
-    <input type="password" name="password" placeholder="Password" class="form-control" required />
-    <div class="hint">Password should contain letters, numbers, and symbols.</div>
-
-    <input type="text" name="first_name" placeholder="First Name" class="form-control" required />
+    <div class="form-floating mb-3">
+    <input type="text" name="first_name" placeholder="First Name" class="form-control mb-2" required />
     <div class="hint">Only English letters are allowed (A-Z, a-z).</div>
-
-    <input type="text" name="last_name" placeholder="Last Name" class="form-control" required />
+    </div>
+      <div class="form-floating mb-3">
+    <input type="text" name="last_name" placeholder="Last Name" class="form-control mb-2" required />
     <div class="hint">Only English letters are allowed (A-Z, a-z).</div>
-
-    <input type="text" name="national_id" placeholder="ID Number (9 digits)" class="form-control" required />
-    <div class="hint">Enter exactly 9 digits for ID.</div>
-
-    <input type="text" name="card_number" placeholder="Credit Card (XXXX XXXX XXXX XXXX)" class="form-control" required />
+      </div>
+        <div class="form-floating mb-3">
+    <input type="text" class="form-control" id="nationalID" name="national_id" placeholder="ID Number  " maxlength="9" required>
+        <div class="form-text text-muted hint">Exactly 9 digits.</div>
+        </div>
+          <div class="form-floating mb-3">
+    <input type="text" name="card_number" placeholder="Credit Card (XXXX XXXX XXXX XXXX)" class="form-control mb-2" required />
     <div class="hint">Enter 16 digits, grouped in 4s.</div>
-
-    <input type="text" name="valid_date" placeholder="Valid Date (MM/YY)" class="form-control" required />
+          </div>
+            <div class="form-floating mb-3">
+    <input type="text" name="valid_date" placeholder="Valid Date (MM/YY)" class="form-control mb-2" maxlength="5" required />
     <div class="hint">Enter date in MM/YY format (e.g., 12/25).</div>
-
-    <input type="text" name="cvc" placeholder="CVC (3 digits)" class="form-control" required />
+            </div>
+              <div class="form-floating mb-3">
+    <input type="text" name="cvc" placeholder="CVC (3 digits)" class="form-control mb-2" maxlength="3" required />
     <div class="hint">Enter exactly 3 digits for CVC.</div>
+              </div>
 
     <button type="submit" class="btn btn w-100">Register</button>
   </form>
@@ -41,13 +56,51 @@
 </div>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
+    // Format credit card input
     const ccInput = document.querySelector('input[name="card_number"]');
     ccInput.addEventListener('input', function(e) {
       let v = e.target.value.replace(/\D/g, '').substring(0,16);
       let formatted = '';
-      for (let i=0; i<v.length; i+=4) formatted += v.substring(i,i+4) + ' ';
+      for (let i = 0; i < v.length; i += 4) {
+        formatted += v.substring(i, i+4) + ' ';
+      }
       e.target.value = formatted.trim();
     });
+
+    // Auto-insert slash in valid date
+    const dateInput = document.querySelector('input[name="valid_date"]');
+    dateInput.addEventListener('input', function(e) {
+      let v = e.target.value.replace(/\D/g, '').substring(0,4);
+      if (v.length > 2) {
+        v = v.substring(0,2) + '/' + v.substring(2);
+      }
+      e.target.value = v;
+    });
+    // Enforce only 3 digits in CVC
+    const cvcInput = document.querySelector('input[name="cvc"]');
+    cvcInput.addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/\D/g, '').substring(0,3);
+    });
   });
+  document.addEventListener("DOMContentLoaded", () => {
+  const pwInput = document.getElementById("passwordInput");
+  const hint    = document.getElementById("passwordHint");
+
+  pwInput.addEventListener("input", () => {
+    const v = pwInput.value;
+    const okLen    = v.length >= 6;
+    const hasLetter= /[A-Za-z]/.test(v);
+    const hasDigit = /\d/.test(v);
+    const hasSym   = /[^A-Za-z0-9]/.test(v);
+
+    if (okLen && hasLetter && hasDigit && hasSym) {
+      hint.textContent = "✅ Strong password";
+      hint.style.color = "green";
+    } else {
+      hint.textContent = "❌ Must be ≥6 chars, include a letter, a digit & a symbol";
+      hint.style.color = "red";
+    }
+  });
+});
 </script>
 {% endblock %}

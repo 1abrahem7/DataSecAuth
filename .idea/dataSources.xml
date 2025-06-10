@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://localhost:3306/auth_db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="users" uuid="cf16efc0-6b2b-407b-a630-8f7adf910db1">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\איברהים אזברגה\PycharmProjects\DataSecAuth\users.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
